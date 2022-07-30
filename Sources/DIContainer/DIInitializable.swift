@@ -6,5 +6,5 @@
 //
 
 public protocol DIInitializable {
-    init?(container: DIContainer)
+    init?(container: DIContainerProtocol)
 }
