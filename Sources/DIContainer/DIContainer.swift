@@ -6,7 +6,11 @@
 //
 
 public class DIContainer: DIContainerProtocol {
-    private var dependencies: [String: Any] = [:]
+    private var dependencies: [String: Any]
+    
+    public init() {
+        self.dependencies = [:]
+    }
     
     private func `key`<Protocol>(for type: Protocol.Type) -> String {
         return "\(type)"
