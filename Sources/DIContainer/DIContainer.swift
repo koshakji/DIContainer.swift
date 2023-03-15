@@ -20,11 +20,11 @@ public class DIContainer: DIContainerProtocol {
         self.dependencies[self.key(for: type)] = value
     }
     
-    public func has<Protocol>(type: Protocol.Type) -> Bool {
+    public func has<Protocol>(type: Protocol.Type = Protocol.self) -> Bool {
         return self.dependencies.index(forKey: self.key(for: type)) != nil
     }
     
-    public subscript<Protocol>(_ type: Protocol.Type) -> Protocol? {
+    public subscript<Protocol>(_ type: Protocol.Type = Protocol.self) -> Protocol? {
         get {
             guard let lifecycle = self.dependencies[self.key(for: type)] as? DILifecycle<Protocol> else {
                 return nil
