@@ -12,6 +12,16 @@ public enum DILifecycle<T> {
     case cached(DICached<T>)
 }
 
+public extension DILifecycle {
+    static func lazySingleton(_ factory: @escaping DIFactory<T>) -> Self {
+        return .lazySingleton(DILazyContainer(factory: factory))
+    }
+    
+    static func cached(_ factory: @escaping DIFactory<T>) -> Self {
+        return .cached(DICached(factory: factory))
+    }
+}
+
 internal extension DILifecycle {
     func reset() {
         if case .cached(let cached) = self {
@@ -30,7 +40,7 @@ public class DILazyContainer<T> {
     private var value: DILazy<T>
     
     
-    init(factory: @escaping DIFactory<T>) {
+    fileprivate init(factory: @escaping DIFactory<T>) {
         self.value = .uninitialized(factory)
     }
     
@@ -57,7 +67,7 @@ public class DICached<T> {
     
     var isCached: Bool { cached == nil }
     
-    public init(factory: @escaping DIFactory<T>) {
+    fileprivate init(factory: @escaping DIFactory<T>) {
         self.factory = factory
     }
     

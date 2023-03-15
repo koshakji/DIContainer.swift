@@ -35,7 +35,7 @@ extension DIContainerProtocol {
         self.register(
             type: type,
             named: name,
-            value: .lazySingleton(DILazyContainer(factory: factory))
+            value: .lazySingleton(factory)
         )
     }
     
