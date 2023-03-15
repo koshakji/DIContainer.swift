@@ -20,6 +20,13 @@ public class DIContainer: DIContainerProtocol {
         }
     }
     
+    private func getLifecycle<Protocol>(
+        _ type: Protocol.Type,
+        named name: String?
+    ) -> DILifecycle<Protocol>? {
+        self.dependencies[self.key(for: type, named: name)] as? DILifecycle<Protocol>
+    }
+    
     public func register<Protocol>(
         type: Protocol.Type,
         named name: String? = nil,
@@ -39,7 +46,7 @@ public class DIContainer: DIContainerProtocol {
         _ type: Protocol.Type = Protocol.self,
         named name: String? = nil
     ) -> Protocol? {
-        guard let lifecycle = self.dependencies[self.key(for: type, named: name)] as? DILifecycle<Protocol> else {
+        guard let lifecycle = self.getLifecycle(type, named: name) else {
             return nil
         }
         
