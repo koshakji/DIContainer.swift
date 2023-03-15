@@ -11,6 +11,8 @@ public protocol DIContainerProtocol {
     func register<Protocol>(type: Protocol.Type, named: String?, value: DILifecycle<Protocol>)
     func has<Protocol>(type: Protocol.Type, named: String?) -> Bool
     func resolve<Protocol>(_ type: Protocol.Type, named: String?) -> Protocol?
+    func isResettable<Protocol>(_ type: Protocol.Type, named: String?) -> Bool
+    func reset<Protocol>(_ type: Protocol.Type, named: String?)
 }
 
 extension DIContainerProtocol {
