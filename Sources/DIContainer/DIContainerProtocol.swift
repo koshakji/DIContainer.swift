@@ -19,7 +19,8 @@ extension DIContainerProtocol {
     public func register<Protocol>(
         type: Protocol.Type = Protocol.self,
         named name: String? = nil,
-        transient factory: @escaping DIFactory<Protocol>) {
+        transient factory: @escaping DIFactory<Protocol>
+    ) {
         self.register(
             type: type,
             named: name,
@@ -77,3 +78,48 @@ extension DIContainerProtocol {
         return self.resolve(type, named: name)!
     }
 }
+
+public extension DIContainerProtocol {
+    private func getFactory<T>(from initializer: @escaping () -> T) -> DIFactory<T> {
+        return { _ in initializer() }
+    }
+    
+    func register<Protocol>(
+        type: Protocol.Type = Protocol.self,
+        named name: String? = nil,
+        transient initializer: @escaping () -> Protocol
+    ) {
+        self.register(
+            type: type,
+            named: name,
+            value: .transient(getFactory(from: initializer))
+        )
+    }
+    
+    func register<Protocol>(
+        type: Protocol.Type = Protocol.self,
+        named name: String? = nil,
+        lazySingleton initializer: @escaping () -> Protocol
+    ) {
+        self.register(
+            type: type,
+            named: name,
+            value: .lazySingleton(getFactory(from: initializer))
+        )
+    }
+    
+    
+    func register<Protocol>(
+        type: Protocol.Type = Protocol.self,
+        named name: String? = nil,
+        cached initializer: @escaping () -> Protocol
+    ) {
+        self.register(
+            type: type,
+            named: name,
+            value: .cached(getFactory(from: initializer))
+        )
+    }
+}
+
+
