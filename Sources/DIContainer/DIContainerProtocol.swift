@@ -19,7 +19,7 @@ extension DIContainerProtocol {
     }
     
     public func register<Protocol>(type: Protocol.Type = Protocol.self, lazySingleton factory: @escaping DIFactory<Protocol>) {
-        self.register(type: type, value: .lazySingleton(DILazy(factory: factory)))
+        self.register(type: type, value: .lazySingleton(DILazyContainer(factory: factory)))
     }
     
     public func register<Protocol>(type: Protocol.Type = Protocol.self, eagerSingleton dependency: Protocol) {

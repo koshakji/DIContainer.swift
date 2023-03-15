@@ -7,26 +7,32 @@
 
 public enum DILifecycle<T> {
     case eagerSingleton(T)
-    case lazySingleton(DILazy<T>)
+    case lazySingleton(DILazyContainer<T>)
     case transient(DIFactory<T>)
 }
 
-public enum DILazy<T> {
-    case uninitialized(DIFactory<T>)
-    case initialized(T?)
+
+public class DILazyContainer<T> {
+    private var value: DILazy<T>
+    
     
     init(factory: @escaping DIFactory<T>) {
-        self = .uninitialized(factory)
+        self.value = .uninitialized(factory)
     }
     
-    mutating func value(for container: any DIContainerProtocol) -> T? {
-        switch self {
+    func value(for container: any DIContainerProtocol) -> T? {
+        switch self.value {
+        case .initialized(let v):
+            return v
         case .uninitialized(let factory):
-            let value = factory(container)
-            self = .initialized(value)
-            return value
-        case .initialized(let value):
-            return value
+            let v = factory(container)
+            self.value = .initialized(v)
+            return v
         }
+    }
+    
+    private enum DILazy<T> {
+        case uninitialized(DIFactory<T>)
+        case initialized(T?)
     }
 }

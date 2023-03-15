@@ -32,10 +32,7 @@ public class DIContainer: DIContainerProtocol {
             
             switch lifecycle {
             case .eagerSingleton(let value): return value
-            case .lazySingleton(var lazy):
-                let value = lazy.value(for: self)
-                self.dependencies[self.key(for: type)] = lazy
-                return value
+            case .lazySingleton(let lazy): return lazy.value(for: self)
             case .transient(let factory): return factory(self)
             }
         }
