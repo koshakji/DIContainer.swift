@@ -10,6 +10,10 @@ Dependencies can be defined with three different lifetimes:
 
 - `eagerSingleton`: A singleton that's initialized and stored in the container and returned as-is whenever requested.
 
-- `lazySingleton`: A singleton that's initialized when first requested. the initialization can make use of other dependencies in the container.
+- `lazySingleton`: A singleton that's initialized when first requested.
 
-- `transient`: A new object is initialized whenever requested. The initialization can make use of other dependencies in the container.
+- `transient`: A new object is initialized whenever requested.
+
+- `cached`: A new object is initialized and cached when first requested. Can be reset at any time to force next `resolve`s to re-initialized the object.
+
+All initializations (factories) get passed the DIContainer that's resolving the dependency
