@@ -51,6 +51,18 @@ extension DIContainerProtocol {
         )
     }
     
+    public func register<Protocol>(
+        type: Protocol.Type = Protocol.self,
+        named name: String? = nil,
+        cached factory: @escaping DIFactory<Protocol>
+    ) {
+        self.register(
+            type: type,
+            named: name,
+            value: .cached(factory)
+        )
+    }
+    
     public subscript<Protocol>(
         _ type: Protocol.Type,
         named name: String? = nil
