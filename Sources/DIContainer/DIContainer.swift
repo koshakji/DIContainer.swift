@@ -54,7 +54,22 @@ public class DIContainer: DIContainerProtocol {
         case .eagerSingleton(let value): return value
         case .lazySingleton(let lazy): return lazy.value(for: self)
         case .transient(let factory): return factory(self)
+        case .cached(let cached): return cached.value(for: self)
         }
+    }
+    
+    public func isResettable<Protocol>(_ type: Protocol.Type, named name: String? = nil) -> Bool {
+        guard let lifecycle = self.getLifecycle(type, named: name) else {
+            return false
+        }
+        return lifecycle.isResettable()
+    }
+    
+    public func reset<Protocol>(_ type: Protocol.Type, named name: String? = nil) {
+        guard let lifecycle = self.getLifecycle(type, named: name) else {
+            return
+        }
+        lifecycle.reset()
     }
 }
 
